@@ -41,6 +41,7 @@ run: venv  ## 🏃 Run the server locally using Python & Flask
 	&& python src/run.py
 
 deploy: # run as a docker container
+	docker rm python-demo-app -f
 	docker run -d -p $(PORT):$(PORT) --name python-demo-app $(IMAGE_REPO):$(IMAGE_TAG)
 
 # deploy:  ## 🚀 Deploy to Azure Web App 
