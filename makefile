@@ -2,13 +2,14 @@
 IMAGE_REG ?= docker.io
 IMAGE_REPO ?= chathumal1994/python-demoapp
 IMAGE_TAG ?= $(shell date -u '+%Y%m%dT%H%M%SZ')
+PORT ?= 9000
 # Used by `deploy` target, sets Azure webap defaults, override as required
 AZURE_RES_GROUP ?= temp-demoapps
 AZURE_REGION ?= uksouth
 AZURE_SITE_NAME ?= pythonapp-$(shell git rev-parse --short HEAD)
 
 # Used by `test-api` target
-TEST_HOST ?= localhost:9000
+TEST_HOST ?= localhost:$(PORT)
 
 # Don't change
 SRC_DIR := src
@@ -39,17 +40,20 @@ run: venv  ## 🏃 Run the server locally using Python & Flask
 	. $(SRC_DIR)/.venv/bin/activate \
 	&& python src/run.py
 
-deploy:  ## 🚀 Deploy to Azure Web App 
-	az group create --resource-group $(AZURE_RES_GROUP) --location $(AZURE_REGION) -o table
-	az deployment group create --template-file deploy/webapp.bicep \
-		--resource-group $(AZURE_RES_GROUP) \
-		--parameters webappName=$(AZURE_SITE_NAME) \
-		--parameters webappImage=$(IMAGE_REG)/$(IMAGE_REPO):$(IMAGE_TAG) -o table 
-	@echo "### 🚀 Web app deployed to https://$(AZURE_SITE_NAME).azurewebsites.net/"
+deploy: # run as a docker container
+	docker run -d -p $(PORT):$(PORT) --name python-demo-app $(IMAGE_REPO):$(IMAGE_TAG)
 
-undeploy:  ## 💀 Remove from Azure 
-	@echo "### WARNING! Going to delete $(AZURE_RES_GROUP) 😲"
-	az group delete -n $(AZURE_RES_GROUP) -o table --no-wait
+# deploy:  ## 🚀 Deploy to Azure Web App 
+# 	az group create --resource-group $(AZURE_RES_GROUP) --location $(AZURE_REGION) -o table
+# 	az deployment group create --template-file deploy/webapp.bicep \
+# 		--resource-group $(AZURE_RES_GROUP) \
+# 		--parameters webappName=$(AZURE_SITE_NAME) \
+# 		--parameters webappImage=$(IMAGE_REG)/$(IMAGE_REPO):$(IMAGE_TAG) -o table 
+# 	@echo "### 🚀 Web app deployed to https://$(AZURE_SITE_NAME).azurewebsites.net/"
+
+# undeploy:  ## 💀 Remove from Azure 
+# 	@echo "### WARNING! Going to delete $(AZURE_RES_GROUP) 😲"
+# 	az group delete -n $(AZURE_RES_GROUP) -o table --no-wait
 
 test: venv  ## 🎯 Unit tests for Flask app
 	. $(SRC_DIR)/.venv/bin/activate \
