@@ -1,6 +1,6 @@
 # Used by `image`, `push` & `deploy` targets, override as required
 IMAGE_REG ?= docker.io
-IMAGE_REPO ?= chathumal1994/python-demoapp
+IMAGE_REPO ?= chathu1994/python-demoapp
 IMAGE_TAG ?= $(shell date -u '+%Y%m%dT%H%M%SZ')
 PORT ?= 9000
 # Used by `deploy` target, sets Azure webap defaults, override as required
