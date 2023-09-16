@@ -2,7 +2,7 @@
 IMAGE_REG ?= docker.io
 IMAGE_REPO ?= chathu1994/python-demoapp
 IMAGE_TAG ?= $(shell date -u '+%Y%m%d')
-PORT ?= 9000
+PORT ?= 5000
 # Used by `deploy` target, sets Azure webap defaults, override as required
 AZURE_RES_GROUP ?= temp-demoapps
 AZURE_REGION ?= uksouth
