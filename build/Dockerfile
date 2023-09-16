@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.source = "https://github.com/chathumal-nad/python
 
 ARG srcDir=src
 WORKDIR /app
+RUN pwd
 COPY $srcDir/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -13,4 +14,4 @@ COPY $srcDir/app ./app
 
 EXPOSE 5000
 
-CMD ["gunicorn", "-b", "0.0.0.0:9000", "run:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "run:app"]
