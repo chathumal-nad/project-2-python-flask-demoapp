@@ -29,9 +29,14 @@ lint-fix: venv  ## 📜 Lint & format, will try to fix errors and modify code
 	. $(SRC_DIR)/.venv/bin/activate \
 	&& black $(SRC_DIR)
 
+# image:  ## 🔨 Build container image from Dockerfile 
+# 	docker build . --file build/Dockerfile \
+# 	--tag $(IMAGE_REG)/$(IMAGE_REPO):$(IMAGE_TAG)
+
 image:  ## 🔨 Build container image from Dockerfile 
-	docker build . --file build/Dockerfile \
+	docker build . \
 	--tag $(IMAGE_REG)/$(IMAGE_REPO):$(IMAGE_TAG)
+
 
 push:  ## 📤 Push container image to registry 
 	docker push $(IMAGE_REG)/$(IMAGE_REPO):$(IMAGE_TAG)
