@@ -24,7 +24,7 @@ stages:
   displayName: Build and push stage
   jobs:
   - job: Build
-    displayName: Build
+    displayName: Build and push
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -38,8 +38,14 @@ stages:
         tags: |
           $(tag)
 
-    - task: AzureWebAppContainer@1
-      inputs:
-        azureSubscription: 'Chathumal Test Subscription (f934be49-91f8-43f0-a2f5-1ca8d0725917)'
-        appName: 'azure-devops-sample-app'
-        containers: 'chathumalacr.azurecr.io/az-devops-python-demo:$(tag)'
+- stage: Deploy
+  displayName: Deploy and Update Azure Web App stage
+  jobs:
+    - job: Deploy
+      displayName: Deploy and Update Azure Web App
+      steps:
+      - task: AzureWebAppContainer@1
+        inputs:
+          azureSubscription: 'Chathumal Test Subscription (f934be49-91f8-43f0-a2f5-1ca8d0725917)'
+          appName: 'azure-devops-sample-app'
+          containers: 'chathumalacr.azurecr.io/az-devops-python-demo:$(tag)'
