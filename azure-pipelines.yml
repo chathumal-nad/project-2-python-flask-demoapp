@@ -37,3 +37,9 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Chathumal Test Subscription (f934be49-91f8-43f0-a2f5-1ca8d0725917)'
+        appName: 'azure-devops-sample-app'
+        containers: 'chathumalacr.azurecr.io/az-devops-python-demo:$(tag)'
